@@ -15,7 +15,7 @@ Spectrum processing takes place on your computer. You can work offline after ins
 
 ## Try it with a spectrum
 
-Download [this anonymized Bruker example](examples/bruker-1h-example.zip), then choose
+Download [this Bruker 1H-NMR example](examples/bruker-1h-example.zip), then choose
 **File → Open ZIP** in NMR-go. The screenshots on this page use that same real
 measurement. Try zooming into a crowded region and dragging a rectangle in **Pick Peaks**
 to label the maxima.
@@ -37,3 +37,8 @@ Third-party notices accompany the Windows package.
 
 If something goes wrong, include the NMR-go version, what you did and the
 exact error. Use the downloadable example where possible.
+
+## Acknowledgments
+
+Thanks to ChatGPT 6.1 Sol, ChatGPT 6.2 Sol, Gemini Argon, and Claude Opus 5.5
+for help with development and review.
