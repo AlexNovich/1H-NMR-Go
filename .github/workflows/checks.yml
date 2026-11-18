@@ -1,0 +1,68 @@
+name: Release repository checks
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['README.md', 'docs/**', 'TERMS.md']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  linux:
+    name: Linux x86-64 source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: '3.11.9'
+      - name: Review tracked files
+        run: python scripts/check_no_sensitive_data.py --tracked
+      - name: Install Qt desktop libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y             libegl1 libgl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0             libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-render-util0             libxcb-xinerama0 libxcb-xinput0 xvfb xauth
+      - name: Install from the Linux x86-64 lock
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --only-binary=:all: --require-hashes -r requirements/linux-x86_64.lock
+          .venv/bin/python -m pip install --no-deps --no-build-isolation -e .
+          .venv/bin/python -m pip check
+      - name: Run tests and lint
+        env:
+          QT_QPA_PLATFORM: offscreen
+          MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
+        run: |
+          .venv/bin/python -m pytest -q
+          .venv/bin/python -m ruff check src tests scripts
+      - name: Launch with the X11 Qt backend
+        env:
+          QT_QPA_PLATFORM: xcb
+          MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
+        run: |
+          timeout 120s xvfb-run -a .venv/bin/nmr-go --self-test "$RUNNER_TEMP/linux-self-test.json"
+          .venv/bin/python -c 'import json, sys; report = json.load(open(sys.argv[1])); assert report["status"] == "passed" and len(report["checks"]) == 17; print("17 X11 self-test groups passed")' "$RUNNER_TEMP/linux-self-test.json"
+  windows:
+    name: Windows x64 source
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: '3.11.9'
+      - name: Review tracked files
+        run: python scripts/check_no_sensitive_data.py --tracked
+      - name: Install from the Windows x64 lock
+        run: |
+          python -m pip install --only-binary=:all: --require-hashes -r requirements/win-amd64.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
+      - name: Run tests and lint
+        env:
+          QT_QPA_PLATFORM: offscreen
+          MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
+        run: |
+          python -m pytest -q
+          python -m ruff check src tests scripts

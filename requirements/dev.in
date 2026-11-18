@@ -1,0 +1,14 @@
+numpy
+scipy
+nmrglue
+PySide6-Essentials==6.8.0.2
+pyqtgraph
+matplotlib
+pytest
+pytest-qt
+ruff
+pypdf
+PyMuPDF
+pyinstaller
+setuptools==80.9.0
+wheel==0.45.1

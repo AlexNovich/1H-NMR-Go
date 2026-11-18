@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nmr-go"
+version = "0.12.0"
+description = "Offline Bruker proton NMR desktop application"
+requires-python = ">=3.11,<3.12"
+dependencies = ["numpy", "scipy", "nmrglue", "PySide6-Essentials", "pyqtgraph", "matplotlib", "pypdf"]
+
+[project.scripts]
+nmr-go = "bruker_nmr.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = ["local_test: explicit local corpus checks; never selected in CI"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
