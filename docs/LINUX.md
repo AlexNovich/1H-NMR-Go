@@ -8,9 +8,10 @@ Install your distribution's Python venv and Qt X11 runtime libraries if needed.
 On Ubuntu 24.04, the Qt packages used in CI are:
 
 ```sh
-sudo apt-get install libegl1 libgl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0 \
-  libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-render-util0 \
-  libxcb-xinerama0 libxcb-xinput0
+sudo apt-get install libegl1 libgl1 libopengl0 libx11-xcb1 libxkbcommon0 libxkbcommon-x11-0 \
+  libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+  libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-sync1 \
+  libxcb-xfixes0 libxcb-xinerama0 libxcb-xinput0 libxcb-xkb1
 ```
 
 Example for x86-64:

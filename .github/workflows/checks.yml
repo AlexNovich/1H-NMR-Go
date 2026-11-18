@@ -22,7 +22,11 @@ jobs:
       - name: Install Qt desktop libraries
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y             libegl1 libgl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0             libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-render-util0             libxcb-xinerama0 libxcb-xinput0 xvfb xauth
+          sudo apt-get install --no-install-recommends -y \
+            libegl1 libgl1 libopengl0 libx11-xcb1 libxkbcommon0 libxkbcommon-x11-0 \
+            libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-sync1 \
+            libxcb-xfixes0 libxcb-xinerama0 libxcb-xinput0 libxcb-xkb1 xvfb xauth
       - name: Install from the Linux x86-64 lock
         run: |
           python -m venv .venv
@@ -41,6 +45,9 @@ jobs:
           QT_QPA_PLATFORM: xcb
           MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
         run: |
+          plugin=$(.venv/bin/python -c 'from PySide6.QtCore import QLibraryInfo; print(QLibraryInfo.path(QLibraryInfo.LibraryPath.PluginsPath) + "/platforms/libqxcb.so")')
+          ldd "$plugin" > "$RUNNER_TEMP/qt-xcb-dependencies.txt"
+          if grep -F 'not found' "$RUNNER_TEMP/qt-xcb-dependencies.txt"; then exit 1; fi
           timeout 120s xvfb-run -a .venv/bin/nmr-go --self-test "$RUNNER_TEMP/linux-self-test.json"
           .venv/bin/python -c 'import json, sys; report = json.load(open(sys.argv[1])); assert report["status"] == "passed" and len(report["checks"]) == 17; print("17 X11 self-test groups passed")' "$RUNNER_TEMP/linux-self-test.json"
   windows:
