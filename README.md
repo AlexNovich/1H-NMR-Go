@@ -4,7 +4,7 @@ NMR-go is a desktop app for working with Bruker ¹H NMR spectra. Open a ZIP or
 experiment folder, check the spectrum, integrate signals, and export a PDF.
 Created by Alexander Novichkov for everyday work at the chemistry bench.
 
-![NMR-go showing a zoomed Bruker proton spectrum with peak labels](docs/example-workbench.png)
+![NMR-go showing an enlarged spectrum with integrals, peak labels and the Peaks table](docs/example-workbench.png)
 
 ## Get started
 

@@ -8,7 +8,7 @@ from pathlib import PurePosixPath
 
 # Owner-approved distribution assets, pinned to their reviewed bytes.
 RELEASE_ASSETS = {
-    "docs/example-workbench.png": "c57cc164859cf903f6fb6fd8284f118f063c0f4933c02419acb60b0f0d6ed1f4",
+    "docs/example-workbench.png": "3781c0879e417067cd25fb87a0b88364ae25fc9b1e59d9f33d6364e761b2914c",
     "docs/example-spectrum.png": "aad94dd1b9fe1ce06d6901a0526d4ec4795ab383adf1e876bbbb17127a9f5407",
     "examples/bruker-1h-example.zip": "e60061fedb7715660b188ed4c7e989434ffdeb839892db7b59312afcbf04e062",
 }
