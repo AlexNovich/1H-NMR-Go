@@ -14,13 +14,13 @@ $python = Join-Path $buildEnv 'Scripts/python.exe'
 & $python scripts/check_no_sensitive_data.py --tracked; Check-Exit
 $env:QT_QPA_PLATFORM = 'offscreen'
 & $python -m pytest -q; Check-Exit
-& $python -m ruff check src tests scripts/check_no_sensitive_data.py scripts/package_report.py scripts/benchmark_editor.py scripts/write_app_icon.py; Check-Exit
+& $python -m ruff check src tests scripts; Check-Exit
 Remove-Item Env:QT_QPA_PLATFORM -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force build/package-inputs | Out-Null
 & $python scripts/benchmark_editor.py build/package-inputs/editor-benchmark.json; Check-Exit
 & $python scripts/write_app_icon.py build/package-inputs/nmr-go.ico; Check-Exit
 $appVersion = (& $python -c "from bruker_nmr import __version__; print(__version__)"); Check-Exit
-$identity = @{version=$appVersion; source_commit=$sourceCommit; build_kind='Windows x64 release candidate 8'}
+$identity = @{version=$appVersion; source_commit=$sourceCommit; build_kind='Windows x64 portable release'}
 $identity | ConvertTo-Json | Set-Content -Encoding utf8 build/package-inputs/build_identity.json
 & $python -m PyInstaller packaging/NMR-go.spec --noconfirm --clean; Check-Exit
 & $python scripts/package_report.py; Check-Exit

@@ -1,0 +1,25 @@
+name: Windows release package
+on:
+  workflow_dispatch:
+  push:
+    tags: ['windows-preview-*', 'v*']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: '3.11.9'
+      - shell: pwsh
+        run: ./scripts/build_windows.ps1
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: NMR-go-windows-x64
+          path: |
+            dist/NMR-go-windows-x64.zip
+            dist/NMR-go-windows-x64.zip.sha256
+          retention-days: 14

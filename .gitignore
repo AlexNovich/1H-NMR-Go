@@ -28,6 +28,12 @@
 !/requirements/dev.in
 !/packaging/
 !/packaging/NMR-go.spec
+!/packaging/third-party/
+!/packaging/third-party/*.txt
+!/packaging/third-party/Mesa-11.2.2-LICENSE.html
+!/packaging/third-party/Qt-LICENSES/
+!/packaging/third-party/Qt-LICENSES/*.txt
+!/.github/workflows/windows-release.yml
 !/tests/
 !/tests/*.py
 !/tests/synthetic_manifest.json
